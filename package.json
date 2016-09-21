@@ -1,0 +1,41 @@
+{
+  "name": "bootstrap-geocoder",
+  "description": "demo plugin demonstrating how to wire esri-leaflet-geocoder to a bootstrap input",
+  "version": "1.0.0",
+  "private": true,
+  "author": "John Gravois <jgravois@esri.com> (http://johngravois.com)",
+  "contributors": [
+    "John Gravois <jgravois@esri.com> (http://johngravois.com)"
+  ],
+  "dependencies": {
+    "esri-leaflet": "^2.0.3",
+    "esri-leaflet-geocoder": "2.1.4",
+    "leaflet": "1.0.0-rc.3"
+  },
+  "devDependencies": {
+    "http-server": "^0.9.0",
+    "rollup": "^0.25.4",
+    "rollup-plugin-json": "^2.0.0",
+    "rollup-plugin-node-resolve": "^1.4.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "watch": "^0.19.2"
+  },
+  "homepage": "https://github.com/jgravois/bootstrap-geocoder",
+  "jsnext:main": "src/GeosearchInput.js",
+  "jspm": {
+    "registry": "npm",
+    "format": "es6",
+    "main": "index.js"
+  },
+  "license": "Apache-2.0",
+  "main": "built/bootstrap-geocoder.js",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jgravois/bootstrap-geocoder.git"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "start": "watch 'npm run build' src & http-server"
+  }
+}

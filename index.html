@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>bootstrap&middot;geosearch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-beta.7/css/calcite-web.min.css"> -->
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- Load Leaflet from CDN-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet-src.js"></script>
+
+    <!-- this demo plugin bundles the needed code from Esri Leaflet and Esri Leaflet Geocoder -->
+    <script src="../built/bootstrap-geocoder.js"></script>
+
+    <style type="text/css">
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      #map {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        display: none;
+      }
+
+      #intro {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+      }
+
+      .container {
+        width: auto;
+        max-width: 600px;
+      }
+
+      .input-group {
+        width: 100%;
+      }
+
+      li {
+        padding: 3px 20px;
+        margin: 0;
+      }
+
+      li:hover{
+        background: #7FDFFF;
+        border-color: #7FDFFF;
+      }
+
+      .geocoder-control-selected{
+        background: #7FDFFF;
+        border-color: #7FDFFF;
+      }
+
+      ul li {
+        list-style-type: none;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <!-- Part 1: Wrap all page content here -->
+    <div id= "map"></div>
+    <div id="intro">
+      <!-- Begin page content -->
+      <div class="container">
+
+        <div class="page-header">
+          <h3>where would you like to go today?</h3>
+        </div>
+        <input class="form-control"
+          type="text"
+          id="address"
+          autocomplete="off"
+          autofocus
+        />
+      </div>
+    </div>
+
+  <script>
+      var map = L.map('map').setView([45.5165, -122.6764], 3);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var search = BootstrapGeocoder.search({
+        inputTag: 'address',
+        placeholder: 'ex. LAX'
+      }).addTo(map);
+
+      search.on('results', function(e){
+        document.getElementById('map').style.display = 'block';
+        document.getElementById('intro').style.display = 'none';
+
+        // http://leafletjs.com/reference.html#map-invalidatesize
+        map.invalidateSize();
+      });
+    </script>
+
+  </body>
+</html>
