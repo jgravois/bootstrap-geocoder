@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet-src.js"></script>
 
+    <script src="https://unpkg.com/esri-leaflet@2.0.3/dist/esri-leaflet-debug.js"></script>
+
     <!-- this demo plugin bundles the needed code from Esri Leaflet and Esri Leaflet Geocoder -->
     <script src="./built/bootstrap-geocoder.js"></script>
 
@@ -88,7 +90,7 @@
       <div class="container">
 
         <div class="page-header">
-          <h3>where would you like to go today?</h3>
+          <h3>where's healthy food in Philly near me?</h3>
         </div>
         <input class="form-control"
           type="text"
@@ -100,22 +102,70 @@
     </div>
 
   <script>
-      var map = L.map('map').setView([45.5165, -122.6764], 3);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
+      // 2006 pemberton st philadelphia
+      var map = L.map('map').setView([39, -75], 15);
+      L.esri.basemapLayer('Gray').addTo(map);
+      
+      // only show geocoding matches in and very near philly
       var search = BootstrapGeocoder.search({
         inputTag: 'address',
-        placeholder: 'ex. LAX'
+        placeholder: 'ex. LAX',
+        searchBounds: L.latLngBounds([39.7,-75.4], [41,-75]) 
       }).addTo(map);
 
-      search.on('results', function(e){
-        document.getElementById('map').style.display = 'block';
-        document.getElementById('intro').style.display = 'none';
 
-        // http://leafletjs.com/reference.html#map-invalidatesize
-        map.invalidateSize();
+      // once you have an address match, use it to generate a walkshed
+      search.on('results', function(e){
+        var location = e.results[0].latlng.lng + ',' + e.latlng.lat;
+
+        /* 
+          create a free account at https://developers.arcgis.com
+          and generate a service proxy to authenticate when generating walksheds
+          ./applications/ > licensing
+
+          another option would be to append a static token
+          http://resources.arcgis.com/en/help/arcgis-rest-api/#/Service_Area_service_with_synchronous_execution/02r3000000n2000000/
+        */
+        L.esri.request('http://utility.arcgis.com/usrsvcs/appservices/CRigcnlF0U4fwxCG/rest/services/World/ServiceAreas/NAServer/ServiceArea_World/solveServiceArea', {
+            facilities: location,
+            outSr: 4326,
+            
+            /* 
+            this is gnarly, but it gives you fine grained control to generate drive times, distances, trucking, walk etc.
+            */
+            travelMode: "{\"attributeParameterValues\": [{\"parameterName\": \"Restriction Usage\", \"attributeName\": \"Walking\", \"value\": \"PROHIBITED\"}, {\"parameterName\": \"Restriction Usage\", \"attributeName\": \"Preferred for Pedestrians\", \"value\": \"PREFER_LOW\"}, {\"parameterName\": \"Walking Speed (km/h)\", \"attributeName\": \"WalkTime\", \"value\": 5}], \"description\": \"Follows paths and roads that allow pedestrian traffic and finds solutions that optimize travel time. The walking speed is set to 5 kilometers per hour.\", \"impedanceAttributeName\": \"WalkTime\", \"simplificationToleranceUnits\": \"esriMeters\", \"uturnAtJunctions\": \"esriNFSBAllowBacktrack\", \"restrictionAttributeNames\": [\"Preferred for Pedestrians\", \"Walking\"], \"useHierarchy\": false, \"simplificationTolerance\": 2, \"timeAttributeName\": \"WalkTime\", \"distanceAttributeName\": \"Miles\", \"type\": \"WALK\", \"id\": \"caFAgoThrvUpkFBW\", \"name\": \"Walking Time\"}",
+            defaultBreaks: [15] // minutes
+        }, function(error, response){
+          if(error){
+            console.log(error);
+          } else {
+            // once you have a walkshed, turn it into geojson and use it to query your feature service
+
+            var walkShed = L.esri.Util.arcgisToGeoJSON(response.saPolygons.features[0]);
+            var walkShedFeatureCollection = {
+              type: "FeatureCollection",
+              features: [ walkShed ]
+            }
+
+            L.geoJSON(walkShedFeatureCollection).addTo(map);
+
+            var query = L.esri.query({
+                url:'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Healthy_Corner_Stores/FeatureServer/0'
+            });
+
+            // healthy in the callback is a geojson feature collection, so you can dig into feature attributes
+            query.intersects(walkShed).run(function(error, healthy, raw){
+                
+                document.getElementById('intro').style.display = 'none';
+                document.getElementById('map').style.display = 'block';
+                // http://leafletjs.com/reference.html#map-invalidatesize
+                map.invalidateSize();
+                map.setView([39.95023044499703, -75.16538858413], 15);
+                L.geoJson(healthy).addTo(map);
+            });
+          }
+        });
+    
       });
     </script>
 
