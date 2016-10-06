@@ -3,6 +3,11 @@ import L from 'leaflet';
 import { Util } from 'esri-leaflet';
 import { geosearchCore, arcgisOnlineProvider } from 'esri-leaflet-geocoder';
 
+// export all providers so that they can be supplied in the control constructor
+export { ArcgisOnlineProvider, arcgisOnlineProvider } from 'esri-leaflet-geocoder';
+export { FeatureLayerProvider, featureLayerProvider } from 'esri-leaflet-geocoder';
+export { MapServiceProvider, mapServiceProvider } from 'esri-leaflet-geocoder';
+
 export var Search = L.Layer.extend({
 
   options: {
@@ -214,3 +219,5 @@ export function search (options) {
 }
 
 export default search;
+
+
