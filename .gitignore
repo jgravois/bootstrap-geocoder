@@ -7,6 +7,3 @@ Icon
 # Node
 node_modules
 npm-debug.log
-
-/built/bootstrap-geocoder.js
-/built/bootstrap-geocoder.js.map

@@ -2,14 +2,13 @@
   "name": "bootstrap-geocoder",
   "description": "demo plugin demonstrating how to wire esri-leaflet-geocoder to a bootstrap input",
   "version": "1.0.0",
-  "private": true,
   "author": "John Gravois <jgravois@esri.com> (http://johngravois.com)",
   "contributors": [
     "John Gravois <jgravois@esri.com> (http://johngravois.com)"
   ],
   "dependencies": {
     "esri-leaflet": "^2.0.0",
-    "esri-leaflet-geocoder": "2.1.4",
+    "esri-leaflet-geocoder": "^2.0.0",
     "leaflet": "^1.0.0"
   },
   "devDependencies": {

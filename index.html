@@ -27,7 +27,9 @@
 
     <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet-debug.js"></script>
 
-    <!-- this demo plugin bundles the needed code from Esri Leaflet Geocoder -->
+    <script src="https://unpkg.com/esri-leaflet-geocoder@2.3.2/dist/esri-leaflet-geocoder-debug.js"></script>
+
+    <!-- this demo plugin bundles only its own code -->
     <script src="./built/bootstrap-geocoder.js"></script>
 
     <style type="text/css">
@@ -101,6 +103,15 @@
       </div>
     </div>
 
+  <!--script type='module'>
+    import { map as leafletMap, tileLayer } from 'https://unpkg.com/leaflet@1.6.0/dist/leaflet-src.esm.js';
+    // someday
+    // import * as esriLeaflet from 'https://unpkg.com/esri-leaflet@2.3.3/src/EsriLeaflet.js';
+    import { BootstrapGeocoder } from './src/GeosearchInput.js';
+
+    // look ma, no build step!
+    var map = leafletMap('map').setView([45.5165, -122.6764], 3);
+  </script-->
   <script>
       var map = L.map('map').setView([45.5165, -122.6764], 3);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

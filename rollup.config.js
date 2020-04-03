@@ -4,7 +4,7 @@ import { uglify } from 'rollup-plugin-uglify';
 
 export default {
   plugins: [
-    nodeResolve({ mainFields: [ 'module', 'jsnext:main' ] }),
+    nodeResolve(),
     json(),
     uglify()
   ],
@@ -14,11 +14,11 @@ export default {
     globals: {
       'leaflet': 'L',
       'esri-leaflet': 'L.esri',
-      'esri-leaflet-geocoder': 'L.esri.Geocoder'
+      'esri-leaflet-geocoder': 'L.esri.Geocoding'
     },
     sourcemap: true,
     format: 'umd',
     name: 'L.esri.BootstrapGeocoder'
   },
-  external: [ 'leaflet', 'esri-leaflet' ]
+  external: [ 'leaflet', 'esri-leaflet', 'esri-leaflet-geocoder' ]
 }
