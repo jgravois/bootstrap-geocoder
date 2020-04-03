@@ -22,8 +22,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     <!-- Load Leaflet from CDN-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet-src.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet-src.js"></script>
 
     <!-- this demo plugin bundles the needed code from Esri Leaflet and Esri Leaflet Geocoder -->
     <script src="./built/bootstrap-geocoder.js"></script>
@@ -105,7 +105,7 @@
         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      var search = BootstrapGeocoder.search({
+      var search = L.esri.BootstrapGeocoder.search({
         inputTag: 'address',
         placeholder: 'ex. LAX'
       }).addTo(map);
