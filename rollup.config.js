@@ -3,12 +3,8 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import { uglify } from 'rollup-plugin-uglify';
 
 export default {
-  entry: 'src/GeosearchInput.js',
-  moduleName: 'BootstrapGeocoder',
-  format: 'umd',
-  external: ['leaflet'],
   plugins: [
-    nodeResolve(),
+    nodeResolve({ mainFields: [ 'module', 'jsnext:main' ] }),
     json(),
     uglify()
   ],
@@ -17,10 +13,12 @@ export default {
     file: 'built/bootstrap-geocoder.js',
     globals: {
       'leaflet': 'L',
-      'esri-leaflet': 'L.esri'
+      'esri-leaflet': 'L.esri',
+      'esri-leaflet-geocoder': 'L.esri.Geocoder'
     },
-    sourceMap: true,
+    sourcemap: true,
     format: 'umd',
     name: 'L.esri.BootstrapGeocoder'
-  }
+  },
+  external: [ 'leaflet', 'esri-leaflet' ]
 }

@@ -1,10 +1,8 @@
-import L from 'leaflet';
-
-import { Util } from 'esri-leaflet';
+import { DomUtil, DomEvent, Util, Layer } from 'leaflet';
+import { Util as EsriUtil } from 'esri-leaflet';
 import { geosearchCore, arcgisOnlineProvider } from 'esri-leaflet-geocoder';
 
-export var Search = L.Layer.extend({
-
+export var Search = Layer.extend({
   options: {
     allowMultipleResults: true,
     placeholder: 'Search for places or addresses',
@@ -15,7 +13,7 @@ export var Search = L.Layer.extend({
   },
 
   initialize: function (options) {
-    L.Util.setOptions(this, options);
+    Util.setOptions(this, options);
 
     // this demo only supports one provider
     if (!options.providers) {
@@ -44,11 +42,11 @@ export var Search = L.Layer.extend({
       var suggestion = suggestions[i];
 
       if (!list) {
-        list = L.DomUtil.create('ul', null, this._suggestions);
+        list = DomUtil.create('ul', null, this._suggestions);
         list.style.display = 'block';
       }
 
-      var suggestionItem = L.DomUtil.create('li', 'geocoder-control-suggestion', list);
+      var suggestionItem = DomUtil.create('li', 'geocoder-control-suggestion', list);
 
       suggestionItem.innerHTML = suggestion.text;
       suggestionItem.provider = suggestion.provider;
@@ -78,14 +76,14 @@ export var Search = L.Layer.extend({
 
   onAdd: function (map) {
     this._map = map;
-    Util.setEsriAttribution(map);
+    EsriUtil.setEsriAttribution(map);
 
     this._input = document.getElementById(this.options.inputTag);
 
     // create a wrapper div around the input
     this._wrapper = document.createElement('div');
 
-    L.DomUtil.addClass(this._wrapper, this.options.wrapperStyle);
+    DomUtil.addClass(this._wrapper, this.options.wrapperStyle);
 
     this._input.parentNode.insertBefore(this._wrapper, this._input);
     this._wrapper.appendChild(this._input);
@@ -94,26 +92,26 @@ export var Search = L.Layer.extend({
 
     // create dom node for suggestions and place it below the input
     this._suggestions = document.createElement('div');
-    L.DomUtil.addClass(this._suggestions, this.options.suggestionGroupStyle);
+    DomUtil.addClass(this._suggestions, this.options.suggestionGroupStyle);
 
     this._input.parentNode.insertBefore(this._suggestions, null);
 
-    L.DomEvent.addListener(this._input, 'focus', function (e) {
+    DomEvent.addListener(this._input, 'focus', function (e) {
       this._input.placeholder = this.options.placeholder;
     }, this);
 
-    L.DomEvent.addListener(this._suggestions, 'mousedown', function (e) {
+    DomEvent.addListener(this._suggestions, 'mousedown', function (e) {
       var suggestionItem = e.target || e.srcElement;
       this._geosearchCore._geocode(suggestionItem.innerHTML, suggestionItem['data-magic-key'], suggestionItem.provider);
       this.clear();
     }, this);
 
-    L.DomEvent.addListener(this._input, 'blur', function (e) {
+    DomEvent.addListener(this._input, 'blur', function (e) {
       this._input.placeholder = '';
       this.clear();
     }, this);
 
-    L.DomEvent.addListener(this._input, 'keydown', function (e) {
+    DomEvent.addListener(this._input, 'keydown', function (e) {
       var selectedStyle = this.options.selectedStyle;
 
       var list = this._suggestions.querySelectorAll('.' + 'geocoder-control-suggestion');
@@ -136,9 +134,9 @@ export var Search = L.Layer.extend({
             this._geosearchCore._geocode(this._input.value, undefined);
             this.clear();
           } else {
-            L.DomUtil.addClass(list[0], selectedStyle);
+            DomUtil.addClass(list[0], selectedStyle);
           }
-          L.DomEvent.preventDefault(e);
+          DomEvent.preventDefault(e);
           break;
         case 38: // up arrow
           if (selected) {
@@ -148,25 +146,25 @@ export var Search = L.Layer.extend({
           var previousItem = list[selectedPosition - 1];
 
           if (selected && previousItem) {
-            L.DomUtil.addClass(previousItem, selectedStyle);
+            DomUtil.addClass(previousItem, selectedStyle);
           } else {
-            L.DomUtil.addClass(list[list.length - 1], selectedStyle);
+            DomUtil.addClass(list[list.length - 1], selectedStyle);
           }
-          L.DomEvent.preventDefault(e);
+          DomEvent.preventDefault(e);
           break;
         case 40: // down arrow
           if (selected) {
-            L.DomUtil.removeClass(selected, selectedStyle);
+            DomUtil.removeClass(selected, selectedStyle);
           }
 
           var nextItem = list[selectedPosition + 1];
 
           if (selected && nextItem) {
-            L.DomUtil.addClass(nextItem, selectedStyle);
+            DomUtil.addClass(nextItem, selectedStyle);
           } else {
-            L.DomUtil.addClass(list[0], selectedStyle);
+            DomUtil.addClass(list[0], selectedStyle);
           }
-          L.DomEvent.preventDefault(e);
+          DomEvent.preventDefault(e);
           break;
         default:
           // when the input changes we should cancel all pending suggestion requests if possible to avoid result collisions
@@ -180,7 +178,7 @@ export var Search = L.Layer.extend({
       }
     }, this);
 
-    L.DomEvent.addListener(this._input, 'keyup', L.Util.throttle(function (e) {
+    DomEvent.addListener(this._input, 'keyup', Util.throttle(function (e) {
       var key = e.which || e.keyCode;
       var text = (e.target || e.srcElement).value;
 
@@ -212,5 +210,3 @@ export var Search = L.Layer.extend({
 export function search (options) {
   return new Search(options);
 }
-
-export default search;

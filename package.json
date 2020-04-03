@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "esri-leaflet": "^2.0.0",
-    "esri-leaflet-geocoder": "^2.0.0",
+    "esri-leaflet-geocoder": "2.1.4",
     "leaflet": "^1.0.0"
   },
   "devDependencies": {
@@ -21,7 +21,7 @@
     "watch": "^1.0.0"
   },
   "homepage": "https://github.com/jgravois/bootstrap-geocoder",
-  "jsnext:main": "src/GeosearchInput.js",
+  "module": "src/GeosearchInput.js",
   "jspm": {
     "registry": "npm",
     "format": "es6",
