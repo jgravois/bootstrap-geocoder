@@ -4,21 +4,8 @@ Icon
 ._*
 .Spotlight-V100
 
-# SublimeText
-/*.sublime-project
-*.sublime-workspace
-*.sublime-project
-.idea/*
-
-# SASS
-.sass-cache
-
 # Node
 node_modules
 npm-debug.log
 
-# Coverage
-coverage
-
-# Grunt
-.grunt/
+/built/bootstrap-geocoder.js
