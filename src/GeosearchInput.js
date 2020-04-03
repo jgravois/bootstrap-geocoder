@@ -13,12 +13,12 @@ export var Search = Layer.extend({
   },
 
   initialize: function (options) {
-    Util.setOptions(this, options);
-
     // this demo only supports one provider
     if (!options.providers) {
       options.providers = [ arcgisOnlineProvider() ];
     }
+
+    Util.setOptions(this, options);
 
     // instantiate the underlying class and pass along options
     this._geosearchCore = geosearchCore(this, options);
@@ -42,7 +42,7 @@ export var Search = Layer.extend({
       var suggestion = suggestions[i];
 
       if (!list) {
-        list = DomUtil.create('ul', null, this._suggestions);
+        list = DomUtil.create('ul', null, suggestion.provider._contentsElement);
         list.style.display = 'block';
       }
 
@@ -59,17 +59,30 @@ export var Search = Layer.extend({
   },
 
   clear: function () {
-    this._suggestions.innerHTML = '';
-    this._suggestions.style.display = 'none';
-    this._input.value = '';
+    this._clearAllSuggestions();
   },
 
-  clearSuggestions: function () {
-    if (this._nodes) {
-      for (var k = 0; k < this._nodes.length; k++) {
-        if (this._nodes[k].parentElement) {
-          this._suggestions.removeChild(this._nodes[k]);
-        }
+  _clearAllSuggestions: function () {
+    this._suggestions.style.display = 'none';
+
+    for (var i = 0; i < this.options.providers.length; i++) {
+      this._clearProviderSuggestions(this.options.providers[i]);
+    }
+  },
+
+  _clearProviderSuggestions: function (provider) {
+    provider._contentsElement.innerHTML = '';
+  },
+
+  _finalizeSuggestions: function (activeRequests, suggestionsLength) {
+    // check if all requests are finished to remove the loading indicator
+    if (!activeRequests) {
+      DomUtil.removeClass(this._input, 'geocoder-control-loading');
+
+      // also check if there were 0 total suggest results to clear the parent suggestions element
+      // otherwise its display value may be "block" instead of "none"
+      if (!suggestionsLength) {
+        this._clearAllSuggestions();
       }
     }
   },
@@ -93,6 +106,12 @@ export var Search = Layer.extend({
     // create dom node for suggestions and place it below the input
     this._suggestions = document.createElement('div');
     DomUtil.addClass(this._suggestions, this.options.suggestionGroupStyle);
+
+    // create a child contents container element for each provider inside of this._suggestions
+    // to maintain the configured order of providers for suggested results
+    for (var i = 0; i < this.options.providers.length; i++) {
+      this.options.providers[i]._contentsElement = DomUtil.create('div', null, this._suggestions);
+    }
 
     this._input.parentNode.insertBefore(this._suggestions, null);
 
@@ -184,15 +203,14 @@ export var Search = Layer.extend({
 
       // require at least 2 characters for suggestions
       if (text.length < 2) {
-        this._suggestions.innerHTML = '';
-        this._suggestions.style.display = 'none';
+        this._lastValue = this._input.value;
+        this._clearAllSuggestions();
         return;
       }
 
       // if this is the escape key it will clear the input so clear suggestions
       if (key === 27) {
-        this._suggestions.innerHTML = '';
-        this._suggestions.style.display = 'none';
+        this._clearAllSuggestions();
         return;
       }
 

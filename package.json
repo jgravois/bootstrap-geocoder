@@ -8,7 +8,7 @@
   ],
   "dependencies": {
     "esri-leaflet": "^2.0.0",
-    "esri-leaflet-geocoder": "^2.0.0",
+    "esri-leaflet-geocoder": "^2.3.0",
     "leaflet": "^1.0.0"
   },
   "devDependencies": {
