@@ -8,17 +8,17 @@
     "John Gravois <jgravois@esri.com> (http://johngravois.com)"
   ],
   "dependencies": {
-    "esri-leaflet": "^2.0.3",
-    "esri-leaflet-geocoder": "2.1.4",
-    "leaflet": "1.0.0-rc.3"
+    "esri-leaflet": "^2.0.0",
+    "esri-leaflet-geocoder": "^2.0.0",
+    "leaflet": "^1.0.0"
   },
   "devDependencies": {
-    "http-server": "^0.9.0",
-    "rollup": "^0.25.4",
-    "rollup-plugin-json": "^2.0.0",
-    "rollup-plugin-node-resolve": "^1.4.0",
-    "rollup-plugin-uglify": "^1.0.1",
-    "watch": "^0.19.2"
+    "http-server": "^0.12.0",
+    "rollup": "^2.0.0",
+    "@rollup/plugin-json": "^4.0.0",
+    "@rollup/plugin-node-resolve": "^7.0.0",
+    "rollup-plugin-uglify": "^6.0.0",
+    "watch": "^1.0.0"
   },
   "homepage": "https://github.com/jgravois/bootstrap-geocoder",
   "jsnext:main": "src/GeosearchInput.js",

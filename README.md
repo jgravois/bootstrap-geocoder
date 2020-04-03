@@ -11,7 +11,7 @@ Take a look at the [live demo](http://jgravois.github.com/bootstrap-geocoder/ind
 <input id="address-search"/>
 ```
 ```js
-var search = BootstrapGeocoder.search({
+var search = L.esri.BootstrapGeocoder.search({
   inputTag: 'address-search',
   placeholder: 'ex. LAX'
 }).addTo(map);
@@ -19,9 +19,9 @@ var search = BootstrapGeocoder.search({
 
 # API Reference
 
-### `BoostrapGeocoder.search`
+### `L.esri.BoostrapGeocoder.search`
 
-Supports all the constructor options of [`L.esri.Geocoding.geosearch`](http://esri.github.io/esri-leaflet/api-reference/controls/geosearch.html).  
+Supports all the constructor options of [`L.esri.Geocoding.geosearch`](http://esri.github.io/esri-leaflet/api-reference/controls/geosearch.html).
 
 Also expects an `inputTag`.
 
@@ -60,6 +60,3 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 A copy of the license is available in the repository's [license.txt]( https://raw.github.com/Esri/esri-leaflet-geocoder/master/license.txt) file.
-
-[](Esri Tags: ArcGIS Web Mapping Leaflet Geocoding)
-[](Esri Language: JavaScript)
