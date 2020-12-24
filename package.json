@@ -6,16 +6,19 @@
   "contributors": [
     "John Gravois <jgravois@esri.com> (http://johngravois.com)"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "esri-leaflet": "^2.0.0",
     "esri-leaflet-geocoder": "^2.3.0",
     "leaflet": "^1.0.0"
   },
   "devDependencies": {
-    "http-server": "^0.12.0",
-    "rollup": "^2.0.0",
     "@rollup/plugin-json": "^4.0.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
+    "esri-leaflet": "^2.0.0",
+    "esri-leaflet-geocoder": "^2.3.0",
+    "http-server": "^0.12.3",
+    "leaflet": "^1.0.0",
+    "rollup": "^2.0.0",
     "rollup-plugin-uglify": "^6.0.0",
     "watch": "^1.0.0"
   },
